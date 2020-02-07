@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>homework15</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        hr {
+            border: 2px solid silver
+        }
+        .square {
+            width: 50px;
+            height: 50px;
+            background-color: aquamarine;
+            margin: 50px auto 50px;
+            border-radius: 20%;
+        }
+        .tooltip {
+            position: fixed;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .tooltip.active {
+            opacity: 1;
+            visibility: visible;
+        }        
+        
+        .spoiler {
+            background-color: silver;
+            width: 300px;
+            margin: 20px auto;
+            
+        }
+
+        .spoiler h3 {
+            background-color: gray;
+            padding: 10px 20px;
+        }
+
+        .spoiler .hidden {
+            max-height: 0;
+        }
+
+        .hidden.active {
+            max-height: 500px;
+        }
+
+        .spoiler p {
+            padding: 20px;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .spoiler p.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tab-btns {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .tab-content {
+            position: relative;
+        }
+
+        .tab-content__text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .tab-content__text.active01 {
+            visibility: visible;
+            opacity: 1;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="square" data-text="какой то текст"></div>   
+    <hr>
+    <div data-spoiler class="spoiler">
+        <h3>Анотации</h3>
+        <div class="hidden">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor perspiciatis eius quas inventore dignissimos optio delectus! Itaque, velit eaque.</p>
+        </div>
+    </div>
+    <hr>
+    <div class="tabs">
+        <div class="tab-btns">
+            <button data-button="#tab1" class="tab-btn">Button 1</button>
+            <button data-button="#tab2" class="tab-btn">Button 2</button>
+            <button data-button="#tab3" class="tab-btn">Button 3</button>
+        </div>
+        <div class="tab-content">
+            <p class="tab-content__text" id="tab1">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt architecto est doloribus at hic assumenda ratione totam mollitia deleniti quo.
+            </p>
+            <p class="tab-content__text" id="tab2">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde id maiores facere similique! Repellendus ipsam, quibusdam, distinctio harum necessitatibus, ipsum sit excepturi deleniti officiis voluptatem aliquid corrupti officia quisquam qui.
+            </p>
+            <p class="tab-content__text" id="tab3">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus saepe, veritatis, porro maiores mollitia ex eos hic quas quidem dolorem at in iusto laudantium fuga doloribus, tempore voluptas soluta esse. Voluptas dolore eius saepe maiores vel, ipsam libero molestias voluptatum, quod natus quas delectus incidunt amet. Beatae quae iure excepturi?
+            </p>
+        </div>
+    </div>
+
+
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+
+<script>
+    
+    let $selectorToolTip = $("<div>");
+$selectorToolTip.addClass('tooltip');
+
+$('.square').mousemove(function(e) {
+    let text = $(this).data('text');
+    let scrollY = e.clientY;
+    let scrollX = e.clientX;
+
+    $selectorToolTip.text(text);
+    $selectorToolTip.css(
+        {
+            'top': scrollY + 20 + 'px',
+            'left': scrollX + 20 + 'px'
+        });
+    $selectorToolTip.addClass('active');
+    
+    $('body').append($selectorToolTip)
+});
+
+$('.square').mouseout(function(e) {
+    $selectorToolTip.removeClass('active');
+})
+
+$('.spoiler').click(function(e) {
+    let $dataSelector = $(this).data('spoiler');
+    $($dataSelector + ' .hidden').toggleClass('active');
+    $($dataSelector + ' p').toggleClass('active');
+})
+
+$('.tab-btn').each(function() {
+    let hash = $(this).data('button');
+
+    if(window.location.hash === hash) {
+        $('.tab-content__text' + hash).addClass('active01');
+    }
+})
+
+$('.tab-btn').on('click', function(e) {
+    e.preventDefault;
+    let $selector = $(this).data('button');
+
+    if(window.location.hash === $selector) {
+        $($selector + '.tab-content__text').addClass('active01');
+        $(this).addClass('active01');
+    }
+    
+    $('.tab-content__text').removeClass('active01');
+    $('.tab-btn').removeClass('active01');
+    $($selector + '.tab-content__text').addClass('active01');
+    $(this).addClass('active01');
+})
+    </script>
+</body>
+</html>
